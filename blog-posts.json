@@ -1,0 +1,16 @@
+{
+  "posts": [
+    {
+      "title": "The Future of Autonomous AI Agents",
+      "file": "blog1.md"
+    },
+    {
+      "title": "Zero-Trust Architecture in Private Research",
+      "file": "blog2.md"
+    },
+    {
+      "title": "Our Vision for 2026",
+      "file": "blog3.md"
+    }
+  ]
+}

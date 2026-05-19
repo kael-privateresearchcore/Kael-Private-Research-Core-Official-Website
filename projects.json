@@ -1,0 +1,14 @@
+{
+  "projects": [
+    {
+      "id": 1,
+      "title": "Agentic Mesh",
+      "category": "AI Framework",
+      "description": "Autonomous multi-agent coordination framework for research data extraction.",
+      "status": "Active",
+      "icon": "fa-project-diagram",
+      "url": "#",
+      "date": "2025"
+    }
+  ]
+}

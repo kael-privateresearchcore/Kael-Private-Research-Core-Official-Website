@@ -1,0 +1,10 @@
+{
+  "name": "Kael-Private Research Core",
+  "short_name": "Kael Research",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#0A0F1A",
+  "theme_color": "#0B0E17",
+  "description": "Official website of Kael-Private Research Core",
+  "icons": []
+}

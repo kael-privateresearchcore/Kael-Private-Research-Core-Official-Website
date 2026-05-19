@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Kael‑Private Research Core | Next‑Gen Research Lab</title>
+  <meta name="description" content="Kael‑Private Research Core: elite confidential research unit founded by Kaelion (Kyaw Wai Yan Naing). Specializing in autonomous AI, secure systems, and private intelligence. Based in Yangon, Myanmar.">
+  <meta name="theme-color" content="#0B0E17">
+  <link rel="manifest" href="manifest.json">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg-dark: #0A0F1A;
+      --bg-light: #F5F7FF;
+      --text-dark: #EFF3FC;
+      --text-light: #1A202C;
+      --card-dark: rgba(12,20,32,0.55);
+      --card-light: rgba(255,255,255,0.7);
+      --border-dark: rgba(168,85,247,0.3);
+      --border-light: rgba(108,43,217,0.2);
+      --primary: #A855F7;
+      --secondary: #06B6D4;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-dark);
+      line-height: 1.55;
+      transition: background 0.3s, color 0.3s;
+      overflow-x: hidden;
+    }
+    body.light {
+      background: var(--bg-light);
+      color: var(--text-light);
+    }
+    body.light .glass-card {
+      background: var(--card-light);
+      border-color: var(--border-light);
+    }
+    body.light .research-badge,
+    body.light .info-chip,
+    body.light .contact-line a,
+    body.light footer {
+      color: var(--text-light);
+    }
+    #three-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .theme-toggle {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--card-dark);
+      backdrop-filter: blur(8px);
+      border-radius: 60px;
+      padding: 0.8rem;
+      z-index: 100;
+      cursor: pointer;
+      border: 1px solid var(--primary);
+      transition: 0.2s;
+      box-shadow: 0 0 15px rgba(168,85,247,0.3);
+    }
+    .theme-toggle:hover {
+      transform: scale(1.1);
+    }
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 2rem 2rem 3rem;
+      position: relative;
+      z-index: 10;
+    }
+    .glass-card {
+      background: rgba(12,20,32,0.45);
+      backdrop-filter: blur(12px);
+      border-radius: 2rem;
+      border: 1px solid rgba(168,85,247,0.25);
+      transition: all 0.4s;
+      overflow: hidden;
+    }
+    .glass-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+      box-shadow: 0 20px 35px -10px rgba(0,0,0,0.3);
+    }
+    .research-badge {
+      background: linear-gradient(120deg, rgba(6,182,212,0.2), rgba(168,85,247,0.1));
+      backdrop-filter: blur(4px);
+      padding: 0.3rem 1.2rem;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      border-left: 3px solid var(--secondary);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .info-chip {
+      background: rgba(255,255,245,0.05);
+      border-radius: 40px;
+      padding: 0.4rem 1.2rem;
+      font-size: 0.85rem;
+      backdrop-filter: blur(4px);
+      transition: 0.2s;
+    }
+    .info-chip:hover { background: rgba(168,85,247,0.2); transform: scale(1.02); }
+    .btn-telegram, .form-submit {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(105deg, #2AABEE, #1A73C8);
+      padding: 0.8rem 2rem;
+      border-radius: 60px;
+      font-weight: 600;
+      color: white;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .btn-telegram:hover, .form-submit:hover { transform: scale(1.02); opacity: 0.9; }
+    h1 { font-size: clamp(2.5rem,8vw,5rem); font-weight:800; background: linear-gradient(135deg,#FFFFFF,#D8B4FE,#67E8F9); background-clip:text; -webkit-background-clip:text; color:transparent; margin-bottom:1rem; }
+    h2 { font-size: clamp(1.7rem,5vw,2.3rem); font-weight:600; margin-bottom:1.2rem; background: linear-gradient(120deg,#F0F3FA,#C4B5FD); background-clip:text; -webkit-background-clip:text; color:transparent; }
+    .grid-2col { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.8rem; }
+    .grid-3col { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.8rem; }
+    .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .contact-line { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 0.6rem; }
+    footer { margin-top: 4rem; text-align: center; border-top: 1px solid rgba(168,85,247,0.3); padding-top: 2rem; font-size: 0.85rem; }
+    .social-icon { display: inline-block; transition: 0.2s; margin: 0 0.5rem; }
+    .social-icon:hover { transform: translateY(-5px) scale(1.1); filter: drop-shadow(0 0 8px var(--primary)); }
+    .counter-number { font-size: 2rem; font-weight: 800; color: var(--primary); }
+    .blog-card { cursor: pointer; }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      max-width: 700px;
+      width: 90%;
+      background: var(--bg-dark);
+      border-radius: 2rem;
+      padding: 2rem;
+      position: relative;
+    }
+    body.light .modal-content { background: var(--bg-light); }
+    .close-modal {
+      position: absolute;
+      top: 1rem; right: 1.5rem;
+      font-size: 2rem;
+      cursor: pointer;
+    }
+    .visitor-counter {
+      position: fixed;
+      bottom: 2rem;
+      left: 2rem;
+      background: var(--card-dark);
+      backdrop-filter: blur(8px);
+      padding: 0.4rem 1rem;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      z-index: 100;
+    }
+    .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s; }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+    @media (max-width: 760px) { .container { padding: 1.2rem; } }
+  </style>
+</head>
+<body>
+  <canvas id="three-canvas"></canvas>
+  <div class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i></div>
+  <div class="visitor-counter" id="visitorCounter">👥 Loading visitors...</div>
+
+  <div class="container">
+    <!-- Hero -->
+    <div class="reveal active">
+      <div class="flex-between" style="margin-bottom:1.5rem">
+        <div class="research-badge"><i class="fas fa-microchip"></i> ACTIVE RESEARCH NODE · EST. 2025</div>
+        <div class="info-chip"><i class="fas fa-map-marker-alt"></i> 🇲🇲 Yangon, Myanmar</div>
+      </div>
+      <h1>Kael‑Private<br>Research Core</h1>
+      <p style="font-size:1.35rem">Founded & Directed by <strong>Kaelion (Kyaw Wai Yan Naing)</strong></p>
+      <div style="font-size:1rem; color:#A0AEC0; margin:0.5rem 0 1.8rem; height:2rem"><span id="typed-line"></span></div>
+    </div>
+
+    <!-- About -->
+    <div class="glass-card reveal" style="padding:2rem; margin:2rem 0">
+      <h2>About Kael‑Private Research Core</h2>
+      <p><strong>Kael‑Private Research Core</strong> is a high‑discretion research entity based in Yangon, Myanmar, operating at advanced AI, secure systems, and strategic insight.</p>
+      <p style="margin-top:0.8rem">The name <strong>“Kael”</strong> symbolizes precision, resilience, and the convergence of art and logic.</p>
+      <div style="background:rgba(168,85,247,0.12); border-radius:1.5rem; padding:1rem; margin-top:1.5rem; display:flex; flex-wrap:wrap; gap:1rem">
+        <span><i class="fas fa-user-astronaut"></i> Founder: Kaelion (Kyaw Wai Yan Naing)</span>
+        <span><i class="fas fa-code"></i> Developed by: Kyaw Wai Yan Naing</span>
+        <span><i class="fas fa-crown"></i> Powered by: Kael‑Private Research Core</span>
+      </div>
+    </div>
+
+    <!-- Stats counters -->
+    <div class="grid-3col reveal" style="margin-bottom:2rem">
+      <div class="glass-card" style="padding:1.5rem; text-align:center">
+        <i class="fas fa-flask" style="font-size:2rem"></i>
+        <div class="counter-number" id="stat-years">0</div>
+        <p>Years Research & Dev</p>
+      </div>
+      <div class="glass-card" style="padding:1.5rem; text-align:center">
+        <i class="fas fa-project-diagram" style="font-size:2rem"></i>
+        <div class="counter-number" id="stat-projects">0</div>
+        <p>Projects Deployed</p>
+      </div>
+      <div class="glass-card" style="padding:1.5rem; text-align:center">
+        <i class="fas fa-shield-alt" style="font-size:2rem"></i>
+        <div class="counter-number" id="stat-security">0</div>
+        <p>Security Audits</p>
+      </div>
+    </div>
+
+    <!-- Competencies -->
+    <h2 class="reveal"><i class="fas fa-cogs"></i> Strategic Competencies</h2>
+    <div class="grid-2col reveal">
+      <div class="glass-card" style="padding:1.5rem"><i class="fas fa-robot" style="font-size:2rem; color:#A855F7"></i><h3>Autonomous AI Agents</h3><p>Agentic workflows, LLM orchestration, private on‑premise agents.</p></div>
+      <div class="glass-card" style="padding:1.5rem"><i class="fas fa-lock" style="font-size:2rem; color:#06B6D4"></i><h3>Secure Infrastructure</h3><p>Zero‑trust, encrypted tunnels, private cloud.</p></div>
+      <div class="glass-card" style="padding:1.5rem"><i class="fas fa-chart-line" style="font-size:2rem; color:#F97316"></i><h3>Private Intelligence</h3><p>Data synthesis, threat modeling, research‑as‑a‑service.</p></div>
+      <div class="glass-card" style="padding:1.5rem"><i class="fas fa-code-branch" style="font-size:2rem; color:#C084FC"></i><h3>Full‑Stack Lab</h3><p>Production web apps, API gateways, real‑time dashboards.</p></div>
+    </div>
+
+    <!-- Blog/News Section (loaded from blog-posts.json) -->
+    <h2 class="reveal"><i class="fas fa-newspaper"></i> Research Notes</h2>
+    <div id="blog-container" class="grid-2col reveal"></div>
+
+    <!-- Contact Form -->
+    <div class="glass-card reveal" style="padding:2rem; margin:2rem 0">
+      <h2><i class="fas fa-envelope"></i> Send a Message</h2>
+      <form id="contact-form" action="https://formspree.io/f/mnnnqkra" method="POST">
+        <input type="text" name="name" placeholder="Your Name" required style="width:100%; padding:0.8rem; margin-bottom:1rem; border-radius:1rem; border:none; background:rgba(255,255,255,0.1); color:inherit">
+        <input type="email" name="email" placeholder="Your Email" required style="width:100%; padding:0.8rem; margin-bottom:1rem; border-radius:1rem; background:rgba(255,255,255,0.1); color:inherit">
+        <textarea name="message" rows="4" placeholder="Your Message" required style="width:100%; padding:0.8rem; margin-bottom:1rem; border-radius:1rem; background:rgba(255,255,255,0.1); color:inherit"></textarea>
+        <button type="submit" class="form-submit">Send <i class="fas fa-paper-plane"></i></button>
+      </form>
+      <div id="form-status" style="margin-top:1rem"></div>
+    </div>
+
+    <!-- Contact details -->
+    <div class="glass-card reveal" style="padding:2rem">
+      <h2><i class="fas fa-address-card"></i> Direct Contact</h2>
+      <div class="grid-2col">
+        <div>
+          <div class="contact-line"><i class="fas fa-phone-alt"></i> <a href="tel:+9509427400472">+95 09427400472</a></div>
+          <div class="contact-line"><i class="fas fa-envelope"></i> <a href="mailto:kael-privateresearchcore@hotmail.com">hotmail</a> | <a href="mailto:kael-privateresearchcore@outlook.com">outlook</a> | <a href="mailto:kael.privateresearchcore@gmail.com">gmail</a></div>
+          <div class="contact-line"><i class="fab fa-telegram"></i> <a href="https://t.me/kael_privateresearchcore" target="_blank">@kael_privateresearchcore</a></div>
+        </div>
+        <div>
+          <div><i class="fas fa-map-pin"></i> No.358/125, Block, Yangon, Myanmar. 11451, MM.</div>
+          <div class="info-chip" style="margin-top:1rem"><i class="fas fa-circle" style="color:#10B981; font-size:0.7rem"></i> Live response within 24h</div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>© 2026 Kael‑Private Research Core · All rights reserved.</p>
+      <div style="display:flex; justify-content:center; gap:1rem; flex-wrap:wrap; margin:1rem 0">
+        <span class="info-chip">Founder : Kaelion (Kyaw Wai Yan Naing)</span>
+        <span class="info-chip">Developed by : Kyaw Wai Yan Naing</span>
+        <span class="info-chip">Powered By : Kael‑Private Research Core</span>
+        <span class="info-chip">🇲🇲 Myanmar</span>
+      </div>
+      <div>
+        <a href="https://github.com/kael-privateresearchcore" target="_blank" class="social-icon"><i class="fab fa-github fa-2x"></i></a>
+        <a href="https://www.facebook.com/profile.php?id=61588895473551" target="_blank" class="social-icon"><i class="fab fa-facebook fa-2x"></i></a>
+        <a href="https://t.me/kael_privateresearchcore" target="_blank" class="social-icon"><i class="fab fa-telegram fa-2x"></i></a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Modal for blog posts -->
+  <div id="blogModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    // ========== 3D ANIMATED BACKGROUND (Three.js) ==========
+    const canvas3d = document.getElementById('three-canvas');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas: canvas3d, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    const geometry = new THREE.TorusKnotGeometry(1.5, 0.4, 100, 16);
+    const material = new THREE.MeshStandardMaterial({ color: 0xA855F7, roughness: 0.3, metalness: 0.7, emissive: 0x220033 });
+    const knot = new THREE.Mesh(geometry, material);
+    scene.add(knot);
+    const ambientLight = new THREE.AmbientLight(0x404060);
+    scene.add(ambientLight);
+    const light = new THREE.PointLight(0xffffff, 1);
+    light.position.set(5, 5, 5);
+    scene.add(light);
+    camera.position.z = 4;
+    let mouseX = 0, mouseY = 0;
+    document.addEventListener('mousemove', (e) => {
+      mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+      mouseY = (e.clientY / window.innerHeight) * 2 - 1;
+    });
+    function animate3d() {
+      requestAnimationFrame(animate3d);
+      knot.rotation.x += 0.008;
+      knot.rotation.y += 0.01;
+      knot.rotation.z += 0.005;
+      knot.position.x = mouseX * 0.5;
+      knot.position.y = -mouseY * 0.3;
+      renderer.render(scene, camera);
+    }
+    animate3d();
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // ========== TYPING ANIMATION ==========
+    const phrases = ["Confidential research lab for autonomous AI.", "Secure infrastructure · Private intelligence.", "Innovation from Myanmar to the world."];
+    let idx = 0, jdx = 0, deleting = false;
+    const typedSpan = document.getElementById("typed-line");
+    function type() {
+      const current = phrases[idx];
+      if (!deleting && jdx <= current.length) {
+        typedSpan.textContent = current.substring(0, jdx);
+        jdx++;
+        if (jdx === current.length + 1) deleting = true;
+        setTimeout(type, 100);
+      } else if (deleting && jdx >= 0) {
+        typedSpan.textContent = current.substring(0, jdx);
+        jdx--;
+        if (jdx === 0) {
+          deleting = false;
+          idx = (idx + 1) % phrases.length;
+        }
+        setTimeout(type, 50);
+      } else setTimeout(type, 500);
+    }
+    type();
+
+    // ========== DARK/LIGHT MODE ==========
+    const toggleBtn = document.getElementById('themeToggle');
+    toggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('light');
+      const icon = toggleBtn.querySelector('i');
+      if (document.body.classList.contains('light')) icon.className = 'fas fa-sun';
+      else icon.className = 'fas fa-moon';
+    });
+
+    // ========== ANIMATED STATS COUNTERS ==========
+    function animateCounter(el, target) {
+      let current = 0;
+      const step = target / 50;
+      const timer = setInterval(() => {
+        current += step;
+        if (current >= target) {
+          el.innerText = target;
+          clearInterval(timer);
+        } else el.innerText = Math.floor(current);
+      }, 30);
+    }
+    const observerStats = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          if (entry.target.id === 'stat-years') animateCounter(entry.target, 6);
+          if (entry.target.id === 'stat-projects') animateCounter(entry.target, 12);
+          if (entry.target.id === 'stat-security') animateCounter(entry.target, 8);
+          observerStats.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+    observerStats.observe(document.getElementById('stat-years'));
+    observerStats.observe(document.getElementById('stat-projects'));
+    observerStats.observe(document.getElementById('stat-security'));
+
+    // ========== VISITOR COUNTER ==========
+    async function updateVisitorCounter() {
+      try {
+        const res = await fetch('https://api.countapi.xyz/hit/kaelresearch/visits');
+        const data = await res.json();
+        document.getElementById('visitorCounter').innerHTML = `👥 ${data.value} visitors`;
+      } catch(e) {
+        let count = localStorage.getItem('visitorCount') || 1234;
+        count = parseInt(count) + 1;
+        localStorage.setItem('visitorCount', count);
+        document.getElementById('visitorCounter').innerHTML = `👥 ${count} visits`;
+      }
+    }
+    updateVisitorCounter();
+
+    // ========== BLOG SECTION (loads from blog-posts.json) ==========
+    const blogContainer = document.getElementById('blog-container');
+    async function loadBlogPosts() {
+      try {
+        const res = await fetch('blog-posts.json?v=' + Date.now());
+        if (!res.ok) throw new Error();
+        const data = await res.json();
+        const posts = data.posts || [];
+        if (posts.length === 0) {
+          blogContainer.innerHTML = '<div class="glass-card" style="padding:2rem; text-align:center">No research notes yet. Check back soon.</div>';
+          return;
+        }
+        let html = '';
+        for (let post of posts) {
+          html += `<div class="glass-card blog-card" style="padding:1.5rem" data-file="${post.file}">
+            <i class="fas fa-file-alt" style="font-size:1.8rem"></i>
+            <h3>${escapeHtml(post.title)}</h3>
+            <p>Click to read full note →</p>
+          </div>`;
+        }
+        blogContainer.innerHTML = html;
+        document.querySelectorAll('.blog-card').forEach(card => {
+          card.addEventListener('click', async () => {
+            const file = card.getAttribute('data-file');
+            try {
+              const mdRes = await fetch(`/blog/${file}`);
+              if (!mdRes.ok) throw new Error();
+              const md = await mdRes.text();
+              document.getElementById('modal-body').innerHTML = marked.parse(md);
+              document.getElementById('blogModal').style.display = 'flex';
+            } catch(e) {
+              document.getElementById('modal-body').innerHTML = '<p>Content coming soon. Full research notes will be added later.</p>';
+              document.getElementById('blogModal').style.display = 'flex';
+            }
+          });
+        });
+      } catch(err) {
+        blogContainer.innerHTML = '<div class="glass-card" style="padding:2rem; text-align:center">📝 Blog posts will appear here. Create <code>blog-posts.json</code> and <code>/blog/</code> folder.</div>';
+      }
+    }
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+      });
+    }
+    loadBlogPosts();
+
+    // Modal close
+    document.querySelector('.close-modal').addEventListener('click', () => {
+      document.getElementById('blogModal').style.display = 'none';
+    });
+    window.addEventListener('click', (e) => {
+      if (e.target === document.getElementById('blogModal')) document.getElementById('blogModal').style.display = 'none';
+    });
+
+    // ========== CONTACT FORM ==========
+    const form = document.getElementById('contact-form');
+    const formStatus = document.getElementById('form-status');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      try {
+        const res = await fetch(form.action, { method: 'POST', body: data, headers: { 'Accept': 'application/json' } });
+        if (res.ok) {
+          formStatus.innerHTML = '<span style="color:#10B981">✓ Message sent successfully!</span>';
+          form.reset();
+        } else throw new Error();
+      } catch(err) {
+        formStatus.innerHTML = '<span style="color:#EF4444">✗ Failed to send. Try email directly.</span>';
+      }
+    });
+
+    // ========== SCROLL REVEAL ==========
+    const reveals = document.querySelectorAll('.reveal');
+    const scrollObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); });
+    }, { threshold: 0.1 });
+    reveals.forEach(r => scrollObserver.observe(r));
+
+    // ========== PWA: manifest and service worker ==========
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(console.log);
+    }
+  </script>
+</body>
+</html>
